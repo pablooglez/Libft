@@ -79,4 +79,4 @@ The bonus functions of libft deal with list manipulation. This part is worth an 
 
 
 ---
-Made by pablooglez: pablogon@student.42.fr | LinkedIn: [pablooglez](www.linkedin.com/in/pablooglez) 
+Made by pablooglez: pablogon@student.42.fr | LinkedIn: [pablooglez](https://www.linkedin.com/in/pablooglez) 
