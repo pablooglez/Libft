@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: pablogon <pablogon@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/08/21 16:45:24 by pablogon          #+#    #+#              #
+#    Updated: 2024/08/22 20:36:06 by pablogon         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 LIB = ar rcs
 RM = rm -f
 
@@ -25,12 +37,13 @@ INCLUDE = libft.h
 all: $(NAME)
 
 $(NAME):$(OFILES) $(INCLUDE)
-	$(LIB) $(NAME) $(OFILES) 
+	@$(LIB) $(NAME) $(OFILES)
+	@echo "Compiling Libft..."
 
 bonus: $(NAME) $(BOFILES) $(INCLUDE)
 	$(LIB) $(NAME) $(BOFILES) 
 .c.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	$(RM) $(OFILES)

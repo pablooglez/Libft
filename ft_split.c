@@ -6,91 +6,82 @@
 /*   By: pablogon <pablogon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/18 19:04:09 by pablogon          #+#    #+#             */
-/*   Updated: 2024/01/10 19:17:31 by pablogon         ###   ########.fr       */
+/*   Updated: 2024/08/21 18:50:41 by pablogon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-#include "libft.h"
-
-static size_t	count_words(char const *s, char c)
+static int	count_words(char const *str, char c)
 {
-	size_t	count;
-	size_t	i;
+	int	count;
 
 	count = 0;
-	i = 0;
-	while (*(s + i))
+	while (*str)
 	{
-		if (*(s + i) != c)
+		if (*str != c)
 		{
 			count++;
-			while (*(s + i) && *(s + i) != c)
-				i++;
+			while (*str != '\0' && *str != c)
+			{
+				str++;
+			}
 		}
-		else if (*(s + i) == c)
-			i++;
+		else
+		{
+			str++;
+		}
 	}
 	return (count);
 }
 
-static size_t	get_word_len(char const *s, char c)
+static int	check_matrix(char **matrix, int j)
 {
-	size_t	i;
-
-	i = 0;
-	while (*(s + i) && *(s + i) != c)
-		i++;
-	return (i);
-}
-
-static void	free_array(size_t i, char **array)
-{
-	while (i > 0)
+	if (!matrix[j])
 	{
-		i--;
-		free(*(array + i));
+		while (j >= 0)
+			free(matrix[j--]);
+		free(matrix);
+		return (0);
 	}
-	free(array);
+	return (1);
 }
 
-static char	**split(char const *s, char c, char **array, size_t words_count)
+static char	**str_to_matrix(char **matrix, char const *s, char c, int start)
 {
-	size_t	i;
-	size_t	j;
+	int	i;
+	int	j;
+	int	len;
 
 	i = 0;
 	j = 0;
-	while (i < words_count)
+	len = ft_strlen(s);
+	while (i <= len)
 	{
-		while (*(s + j) && *(s + j) == c)
-			j++;
-		*(array + i) = ft_substr(s, j, get_word_len(&*(s + j), c));
-		if (!*(array + i))
+		if (s[i] != c && start == -1)
+			start = i;
+		else if ((s[i] == c || i == len) && start != -1)
 		{
-			free_array(i, array);
-			return (NULL);
-		}
-		while (*(s + j) && *(s + j) != c)
+			matrix[j] = ft_substr(s, start, (i - start));
+			if (!check_matrix(matrix, j))
+				return (NULL);
 			j++;
+			start = -1;
+		}
 		i++;
 	}
-	*(array + i) = NULL;
-	return (array);
+	matrix[j] = 0;
+	return (matrix);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**array;
-	size_t	words;
+	char	**matrix;
+	int		start;
 
-	if (!s)
-		return (NULL);
-	words = count_words(s, c);
-	array = (char **)malloc(sizeof(char *) * (words + 1));
-	if (!array)
-		return (NULL);
-	array = split(s, c, array, words);
-	return (array);
+	start = -1;
+	matrix = (char **)malloc(sizeof(char *) * (count_words(s, c) + 1));
+	if (!matrix)
+		return (0);
+	return (str_to_matrix(matrix, s, c, start));
 }
